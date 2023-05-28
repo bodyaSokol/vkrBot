@@ -309,7 +309,7 @@ const menuAndWebAppScene = new WizardScene('menu',
         let prices_list = [];
         let bucket_from_webApp = JSON.parse(ctx.wizard.state.web_app_data);
         bucket_from_webApp.forEach(element => {
-            const result_price = (element.discount>0)?element.discount:element.price;
+            const result_price = (element.discount>0)?element.price-element.discount:element.price;
             prices_list.push({label:element.name,amount:result_price * element.productCount * 100})
         });
         if(ctx.wizard.state.bonuces_used>0){
