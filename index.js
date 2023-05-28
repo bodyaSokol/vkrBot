@@ -266,7 +266,7 @@ const menuAndWebAppScene = new WizardScene('menu',
         bucket_from_webApp.forEach(element => {
             result_sum_without_discount = result_sum_without_discount + (element.price * element.productCount);
             result_sum = result_sum + ((element.price - element.discount) * element.productCount);
-            result_discount = (result_discount + element.discount) * element.productCount;
+            result_discount = result_discount + (element.discount * element.productCount);
             prices_list_text = `${prices_list_text}\n<u>${element.name}</u> \n${(element.discount>0)?(element.price - element.discount):element.price} x ${element.productCount} = ${(element.price - element.discount)*element.productCount} ${valute} ${(element.discount>0)?"(Скидка "+(element.discount*element.productCount)+" "+valute+")":""}\n`;
         });
         prices_list_text = prices_list_text + ((result_discount>0)?`\n<b>Итого:</b> ${result_sum_without_discount} ${valute}\n<b>Скидка:</b> ${result_discount} ${valute}`:``);
