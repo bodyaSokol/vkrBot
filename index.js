@@ -316,7 +316,7 @@ const menuAndWebAppScene = new WizardScene('menu',
             prices_list.push({label:"Списано бонусов",amount: ctx.wizard.state.bonuces_used * -100})
         }
         setTimeout(function(){
-            ctx.replyWithInvoice(getInvoice(ctx.from.id,"Оплата заказа 💳","Покупка и доставка продуктов",prices_list),{
+            ctx.replyWithInvoice(getInvoice(ctx.from.id,"Оплата заказа","Покупка и доставка продуктов",prices_list),{
                 reply_markup: {
                     inline_keyboard: [
                         [ { text: "Оплатить ",pay:true}],
