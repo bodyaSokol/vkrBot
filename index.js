@@ -60,7 +60,7 @@ const welcomeScene = new WizardScene('welcome',
             telegram_nickname:ctx.message.chat.username
         })
         .then(function (response) {
-            console.log(response);
+
         })
         .catch(function (error) {
             console.log(error);
@@ -188,7 +188,7 @@ const menuAndWebAppScene = new WizardScene('menu',
                 }
             });
         }catch(err){
-            console.log(`Произошла ошибка. Попробуйте позже.`);
+            console.log(err);
             ctx.reply(`Укажите адрес для доставки ⬇️`,{
                 reply_markup: {
                     remove_keyboard: true
@@ -383,7 +383,7 @@ const bonucesScene = new WizardScene('bonuces',
             ctx.wizard.next();
             return ctx.wizard.steps[ctx.wizard.cursor](ctx);
         }catch(err){
-            console.log(`Произошла ошибка. Попробуйте позже.`);
+            console.log(err);
             ctx.wizard.next();
             return ctx.wizard.steps[ctx.wizard.cursor](ctx);
         }
@@ -462,7 +462,6 @@ bot.on("message",async(ctx)=>{
         let url_in_button = ctx.message.reply_to_message.reply_markup.inline_keyboard[0][0].url;
         let user_id_index=Number(url_in_button.indexOf('?user_id='))+9;
         let chat_to_send=url_in_button.slice(user_id_index);
-        console.log(chat_to_send);
         let answer = `Ответ администратора: "${ctx.message.text}"\n\nЧтобы продолжить нажмите на /start`;
         axios.post(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
             text: answer,
@@ -473,4 +472,7 @@ bot.on("message",async(ctx)=>{
 
 bot.on('pre_checkout_query', (ctx) => ctx.answerPreCheckoutQuery(true)) // ответ на предварительный запрос по оплате
 
-bot.launch().then(res=>console.log('Started')).catch(err=>console.log(err));
+bot.launch().then(res=>{
+    var now = new Date();
+    console.log(`Started ${now.toUTCString()}`);
+}).catch(err=>console.log(err));
