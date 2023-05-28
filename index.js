@@ -48,6 +48,7 @@ const welcomeScene = new WizardScene('welcome',
                 return ctx.wizard.steps[ctx.wizard.cursor](ctx);
             }
         }catch(err){
+            console.log(err);
             ctx.wizard.next();
             return ctx.wizard.steps[ctx.wizard.cursor](ctx);
         }
@@ -85,7 +86,7 @@ const welcomeScene = new WizardScene('welcome',
 );
 const menuAndWebAppScene = new WizardScene('menu',
     (ctx)=>{
-        ctx.reply(`Чтобы начать выбирать товары, нажимайте на кнопку снизу ⬇️`,{
+        ctx.reply(`Чтобы начать выбирать товары, нажимайте на кнопку снизу ⬇️⬇️⬇️`,{
             reply_markup: {
                 resize_keyboard:true,
                 one_time_keyboard:true,
@@ -458,15 +459,17 @@ bot.start((ctx)=>{
 
 bot.on("message",async(ctx)=>{
     const chat_id = ctx.message.chat.id; 
-    if(chat_id==-1001886258703){
-        let url_in_button = ctx.message.reply_to_message.reply_markup.inline_keyboard[0][0].url;
-        let user_id_index=Number(url_in_button.indexOf('?user_id='))+9;
-        let chat_to_send=url_in_button.slice(user_id_index);
-        let answer = `Ответ администратора: "${ctx.message.text}"\n\nЧтобы продолжить нажмите на /start`;
-        axios.post(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
-            text: answer,
-            chat_id: chat_to_send
-        })
+    if(chat_id==-1001886258703 && "reply_to_message" in ctx.message){
+        if("reply_markup" in ctx.message.reply_to_message){
+            let url_in_button = ctx.message.reply_to_message.reply_markup.inline_keyboard[0][0].url;
+            let user_id_index=Number(url_in_button.indexOf('?user_id='))+9;
+            let chat_to_send=url_in_button.slice(user_id_index);
+            let answer = `Ответ администратора: "${ctx.message.text}"\n\nЧтобы продолжить нажмите на /start`;
+            axios.post(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+                text: answer,
+                chat_id: chat_to_send
+            })
+        }
     }
 })
 
