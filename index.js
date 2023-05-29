@@ -431,12 +431,14 @@ const questionScene = new WizardScene('question',
         })
         .then(function (response) {
             ctx.reply(`Сообщение отправлено успешно!`);
+            ctx.wizard.next();
+            return ctx.wizard.steps[ctx.wizard.cursor](ctx);
         })
         .catch(function (error) {
             console.log(error);
+            ctx.wizard.next();
+            return ctx.wizard.steps[ctx.wizard.cursor](ctx);
         });
-        ctx.wizard.next();
-        return ctx.wizard.steps[ctx.wizard.cursor](ctx);
     },
     (ctx)=>{
         ctx.scene.leave();
