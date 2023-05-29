@@ -94,7 +94,7 @@ const menuAndWebAppScene = new WizardScene('menu',
                 hide_keyboard: true,
                 keyboard: [
                     [ { text: "Купить товары 🛒",web_app:{url:"https://botsband.online/botShop/"}}],
-                    [ { text: "Мои бонусы 💵"},{ text: "Вопрос менеджеру 💬"}]
+                    [ { text: "Мои бонусы 💵"},{ text: "Задать вопрос 💬"}]
                 ]
             }
         });
@@ -109,7 +109,7 @@ const menuAndWebAppScene = new WizardScene('menu',
         }else if(ctx.message.text=="Мои бонусы 💵"){
             ctx.scene.leave();
             return ctx.scene.enter("bonuces");
-        }else if(ctx.message.text=="Вопрос менеджеру 💬"){
+        }else if(ctx.message.text=="Задать вопрос 💬"){
             ctx.scene.leave();
             return ctx.scene.enter("question");
         }
