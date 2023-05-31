@@ -485,7 +485,6 @@ bot.start((ctx)=>{
 
 bot.on("message",async(ctx)=>{
     const chat_id = ctx.message.chat.id;
-    console.log(ctx);
     if(chat_id==-1001886258703){
         if("reply_to_message" in ctx.message){
             if("reply_markup" in ctx.message.reply_to_message){
@@ -499,18 +498,23 @@ bot.on("message",async(ctx)=>{
                 })
             }
         }
-        if("callback_query" in ctx.update){
-            let string = ctx.update.callback_query.data;
-            string = string.split(",");
-            let user_id=string[0];
-            let order_id=string[1];
-            let status=string[2];
-            let answer = `Заказ №${order_id} ${status}\n\nЧтобы продолжить нажмите на /start`;
-            axios.post(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
-                text: answer,
-                chat_id: user_id
-            })
-        }
+    }
+})
+
+bot.on("callback_query",async(ctx)=>{
+    const chat_id = ctx.message.chat.id;
+    console.log(ctx);
+    if(chat_id==-1001886258703){
+        let string = ctx.update.callback_query.data;
+        string = string.split(",");
+        let user_id=string[0];
+        let order_id=string[1];
+        let status=string[2];
+        let answer = `Заказ №${order_id} ${status}\n\nЧтобы продолжить нажмите на /start`;
+        axios.post(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+            text: answer,
+            chat_id: user_id
+        })
     }
 })
 
