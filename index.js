@@ -342,6 +342,7 @@ const menuAndWebAppScene = new WizardScene('menu',
         return ctx.wizard.steps[ctx.wizard.cursor](ctx);
     },
     (ctx)=>{
+        const user_id = ctx.message.chat.id;
         axios.post(`${root_api_address}/api/orders`, {
             telegram_id: ctx.message.chat.id,
             bonuces_used:ctx.wizard.state.bonuces_used,
@@ -356,29 +357,29 @@ const menuAndWebAppScene = new WizardScene('menu',
             axios.post(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
                 text: `⬇️ <b>Новый заказ</b> ⬇️\n\n${ctx.wizard.state.prices_list_text}\n${(ctx.message.chat.username)?"@"+ctx.message.chat.username:""}`,
                 chat_id: -1001886258703,
-                parse_mode:"HTML"
-                // reply_markup:{
-                //     inline_keyboard: [
-                //     [
-                //         {
-                //         "text": "Заказ собран",
-                //         "callback_data": `${user_id},${order_id},Собран`
-                //         }
-                //     ],
-                //     [
-                //         {
-                //             "text": "Заказ передан курьеру",
-                //             "callback_data": `${user_id},${order_id},Передан курьеру`
-                //         }
-                //     ],
-                //     [
-                //         {
-                //             "text": "Заказ доставлен",
-                //             "callback_data": `${user_id},${order_id},Доставлен`
-                //         }
-                //     ]
-                //     ]
-                // }
+                parse_mode:"HTML",
+                reply_markup:{
+                    inline_keyboard: [
+                        [
+                            {
+                                "text": "Заказ собран",
+                                "callback_data": `${user_id},${order_id},Собран`
+                            }
+                        ],
+                        [
+                            {
+                                "text": "Заказ передан курьеру",
+                                "callback_data": `${user_id},${order_id},Передан курьеру`
+                            }
+                        ],
+                        [
+                            {
+                                "text": "Заказ доставлен",
+                                "callback_data": `${user_id},${order_id},Доставлен`
+                            }
+                        ]
+                    ]
+                }
             })
             .then(function (response) {
 
