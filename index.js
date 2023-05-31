@@ -363,19 +363,19 @@ const menuAndWebAppScene = new WizardScene('menu',
                         [
                             {
                                 "text": "Заказ собран",
-                                "callback_data": `${user_id},${order_id},Собран`
+                                "callback_data": `${user_id},${order_id},собран`
                             }
                         ],
                         [
                             {
                                 "text": "Заказ передан курьеру",
-                                "callback_data": `${user_id},${order_id},Передан курьеру`
+                                "callback_data": `${user_id},${order_id},передан курьеру`
                             }
                         ],
                         [
                             {
                                 "text": "Заказ доставлен",
-                                "callback_data": `${user_id},${order_id},Доставлен`
+                                "callback_data": `${user_id},${order_id},доставлен`
                             }
                         ]
                     ]
@@ -485,15 +485,29 @@ bot.start((ctx)=>{
 
 bot.on("message",async(ctx)=>{
     const chat_id = ctx.message.chat.id; 
-    if(chat_id==-1001886258703 && "reply_to_message" in ctx.message){
-        if("reply_markup" in ctx.message.reply_to_message){
-            let url_in_button = ctx.message.reply_to_message.reply_markup.inline_keyboard[0][0].url;
-            let user_id_index=Number(url_in_button.indexOf('?user_id='))+9;
-            let chat_to_send=url_in_button.slice(user_id_index);
-            let answer = `Ответ администратора: "${ctx.message.text}"\n\nЧтобы продолжить нажмите на /start`;
+    if(chat_id==-1001886258703){
+        if("reply_to_message" in ctx.message){
+            if("reply_markup" in ctx.message.reply_to_message){
+                let url_in_button = ctx.message.reply_to_message.reply_markup.inline_keyboard[0][0].url;
+                let user_id_index=Number(url_in_button.indexOf('?user_id='))+9;
+                let chat_to_send=url_in_button.slice(user_id_index);
+                let answer = `Ответ администратора: "${ctx.message.text}"\n\nЧтобы продолжить нажмите на /start`;
+                axios.post(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+                    text: answer,
+                    chat_id: chat_to_send
+                })
+            }
+        }
+        if("callback_query" in ctx.update){
+            let string = ctx.update.callback_query.data;
+            string = string.split(",");
+            let user_id=string[0];
+            let order_id=string[1];
+            let status=string[2];
+            let answer = `Заказ №${order_id} ${status}\n\nЧтобы продолжить нажмите на /start`;
             axios.post(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
                 text: answer,
-                chat_id: chat_to_send
+                chat_id: user_id
             })
         }
     }
