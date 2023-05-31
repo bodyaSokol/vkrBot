@@ -484,7 +484,8 @@ bot.start((ctx)=>{
 })
 
 bot.on("message",async(ctx)=>{
-    const chat_id = ctx.message.chat.id; 
+    const chat_id = ctx.message.chat.id;
+    console.log(ctx);
     if(chat_id==-1001886258703){
         if("reply_to_message" in ctx.message){
             if("reply_markup" in ctx.message.reply_to_message){
