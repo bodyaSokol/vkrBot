@@ -502,9 +502,9 @@ bot.on("message",async(ctx)=>{
 })
 
 bot.on("callback_query",async(ctx)=>{
-    const chat_id = ctx.message.chat.id;
-    console.log(ctx);
+    const chat_id = ctx.update.callback_query.message.chat.id;
     if(chat_id==-1001886258703){
+        const message_id = ctx.update.callback_query.message.message_id;
         let string = ctx.update.callback_query.data;
         string = string.split(",");
         let user_id=string[0];
@@ -514,6 +514,32 @@ bot.on("callback_query",async(ctx)=>{
         axios.post(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
             text: answer,
             chat_id: user_id
+        })
+        axios.post(`https://api.telegram.org/bot${BOT_TOKEN}/editMessageReplyMarkup`, {
+            chat_id: -1001886258703,
+            message_id:message_id,
+            reply_markup:{
+                inline_keyboard: [
+                    [
+                        {
+                            "text": `Заказ собран${(status==="собран"||status==="передан курьеру"||status==="доставлен")?" ✅":""}`,
+                            "callback_data": `${user_id},${order_id},собран`
+                        }
+                    ],
+                    [
+                        {
+                            "text": `Заказ передан курьеру${(status==="передан курьеру"||status==="доставлен")?" ✅":""}`,
+                            "callback_data": `${user_id},${order_id},передан курьеру`
+                        }
+                    ],
+                    [
+                        {
+                            "text": `Заказ доставлен${(status==="доставлен")?" ✅":""}`,
+                            "callback_data": `${user_id},${order_id},доставлен`
+                        }
+                    ]
+                ]
+            }
         })
     }
 })
