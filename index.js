@@ -352,20 +352,43 @@ const menuAndWebAppScene = new WizardScene('menu',
             let order_id = response.data.values.id;
             let order_bonuses_accrued = response.data.values.bonuses_accrued;
             ctx.reply(`Ваш заказ №${order_id} оплачен успешно! Вам начислено ${order_bonuses_accrued} бонусов.`,{reply_markup: {remove_keyboard: true}});
-        })
-        .catch(function (error) {
-            ctx.reply(`Error`,{reply_markup: {remove_keyboard: true}});
-            console.log(error);
-        });
-        axios.post(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+            /////////////////////////////////////////////////////
+            axios.post(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
             text: `⬇️ <b>Новый заказ</b> ⬇️\n\n${ctx.wizard.state.prices_list_text}\n${(ctx.message.chat.username)?"@"+ctx.message.chat.username:""}`,
             chat_id: -1001886258703,
-            parse_mode:"HTML"
+            parse_mode:"HTML",
+            reply_markup:{
+                inline_keyboard: [
+                  [
+                    {
+                      "text": "Заказ собран",
+                      "callback_data": `${user_id},${order_id},Собран`
+                    }
+                  ],
+                  [
+                    {
+                        "text": "Заказ передан курьеру",
+                        "callback_data": `${user_id},${order_id},Передан курьеру`
+                    }
+                  ],
+                  [
+                    {
+                        "text": "Заказ доставлен",
+                        "callback_data": `${user_id},${order_id},Доставлен`
+                    }
+                  ]
+                ]
+            }
         })
         .then(function (response) {
 
         })
         .catch(function (error) {
+            console.log(error);
+        });
+        })
+        .catch(function (error) {
+            ctx.reply(`Error`,{reply_markup: {remove_keyboard: true}});
             console.log(error);
         });
         setTimeout(function(){
